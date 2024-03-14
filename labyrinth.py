@@ -3,7 +3,7 @@ import pygame
 FPS = pygame.time.Clock()
 win_width = 1280
 win_height = 665
-p_size = 100
+p_size = 50
 
 
 window = pygame.display.set_mode((win_width, win_height))
@@ -42,6 +42,13 @@ class Player(Settings):
         if keys[pygame.K_RIGHT] and self.rect.x<win_width-self.rect.width:
             self.rect.x += self.speed 
             self.flip = True
+    def crash(self, l):
+        for w in l:
+            if self.rect.colliderect(w.rect):
+                return True
+            else:
+                return False
+
 
 class Enemy(Player):
     def __init__(self, image, x, y, w, h, s):
@@ -73,33 +80,34 @@ class Wall:
 
 
 bg = Settings("background.png", 0, 0, win_width, win_height)
-p1 = Player("sprite1.png", 0, win_height//2, p_size, p_size, 5)
-enemy = Enemy("sprite2.png", win_width//1.3, win_height//2.3, p_size*1.5, p_size*1.5, 2)
-gold = Settings("gold.png", win_width//1.15, win_height//1.5, p_size, p_size)
+p1 = Player("sprite1.png", 0, win_height//2, p_size, p_size, 3)
+enemy = Enemy("sprite2.png", win_width//1.3, win_height//1.7, p_size*3, p_size*3, 4)
+gold = Settings("gold.png", win_width//1.15, win_height//1.2, p_size*1.5, p_size*1.5)
 walls = [
-    Wall(win_height,0, win_width//2, 5, (0,200,255)),
-    Wall(0,0, win_width, 5, (0,200,255)),
-    Wall(0,0, win_width, 5, (0,200,255)),
-    Wall(0,0, win_width, 5, (0,200,255)),
-    Wall(0,0, win_width, 5, (0,200,255)),
-    Wall(0,0, win_width, 5, (0,200,255)),
-    Wall(0,0, win_width, 5, (0,200,255)),
-    Wall(0,0, win_width, 5, (0,200,255)),
-    Wall(0,0, win_width, 5, (0,200,255)),
-    Wall(0,0, win_width, 5, (0,200,255)),
-    Wall(0,0, win_width, 5, (0,200,255)),
-    Wall(0,0, win_width, 5, (0,200,255)),
-    Wall(0,0, win_width, 5, (0,200,255)),
-    Wall(0,0, win_width, 5, (0,200,255)),
-    Wall(0,0, win_width, 5, (0,200,255)),
-    Wall(0,0, win_width, 5, (0,200,255)),
-    Wall(0,0, win_width, 5, (0,200,255)),
-    Wall(0,0, win_width, 5, (0,200,255)),
-    Wall(0,0, win_width, 5, (0,200,255))
+    Wall(win_width//4,win_height//8, win_width//2, 5, (0,200,255)),
+    Wall(win_width//4,win_height//1.1, win_width//2, 5, (0,200,255)),
+    Wall(win_width//3,win_height//1.27, win_width//2.97, 5, (0,200,255)),
+    Wall(win_width//4,win_height//8, 5, win_height//3.5, (0,200,255)),
+    Wall(win_width//4,win_height//1.8, 5, win_height//2.8, (0,200,255)),
+    Wall(win_width//2.5,win_height//1.5, win_width//5.5, 5, (0,200,255)),
+    Wall(win_width//3,win_height//1.8, 5, win_width//8.1, (0,200,255)),
+    Wall(win_width//3,win_height//1.8, win_width//5.5, 5, (0,200,255)),
+    Wall(win_width//4,win_height//2.5, win_width//5.5, 5, (0,200,255)),
+    Wall(win_width//1.34,win_height//8, 5, win_height//3.5, (0,200,255)),
+    Wall(win_width//1.34,win_height//1.8, 5, win_height//2.8, (0,200,255)),
+    Wall(win_width//3,win_height//3.7, win_width//5.5, 5, (0,200,255)),
+    Wall(win_width//1.95,win_height//3.7, 5, win_width//6.5, (0,200,255)),
+    Wall(win_width//1.5,win_height//1.5, 5, win_width//15, (0,200,255)),
+    Wall(win_width//1.5,win_height//3.5, 5, win_width//15, (0,200,255)),
+    Wall(win_width//1.7,win_height//7.5, 5, win_width//15, (0,200,255)),
+    Wall(win_width//1.73,win_height//1.8, 5, win_width//17, (0,200,255)),
+    Wall(win_width//1.95,win_height//2.45, win_width//4.2, 5, (0,200,255)),
+    Wall(win_width//1.73,win_height//1.8, win_width//5.8, 5, (0,200,255))
 
 ]    
 
 game = True
+finish = False
 
 pygame.mixer.init()
 pygame.mixer.music.load("music.mp3")
@@ -109,14 +117,16 @@ while game:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             game = False
-
-    bg.draw()
-    p1.move()
-    p1.draw()
-    for w in walls:
-        w.draw()
-    enemy.move(win_width//1.3, win_width//1.12)
-    enemy.draw()
-    gold.draw()
+    if finish != True:
+        bg.draw()
+        p1.move()
+        p1.draw()
+        for w in walls:
+            w.draw()
+            if p1.rect.colliderect(w.rect):
+                finish = True
+        enemy.move(win_width//1.3, win_width//1.12)
+        enemy.draw()
+        gold.draw()
     pygame.display.flip()
     FPS.tick(40)
