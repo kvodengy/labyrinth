@@ -107,7 +107,6 @@ walls = [
 ]    
 
 game = True
-finish = False
 
 pygame.mixer.init()
 pygame.mixer.music.load("music.mp3")
@@ -117,16 +116,15 @@ while game:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             game = False
-    if finish != True:
-        bg.draw()
-        p1.move()
-        p1.draw()
-        for w in walls:
-            w.draw()
-            if p1.rect.colliderect(w.rect):
-                finish = True
-        enemy.move(win_width//1.3, win_width//1.12)
-        enemy.draw()
-        gold.draw()
+    bg.draw()
+    p1.move()
+    p1.draw()
+    for w in walls:
+        w.draw()
+        if p1.rect.colliderect(w.rect):
+            p1 = Player("sprite1.png", 0, win_height//2, p_size, p_size, 3)
+    enemy.move(win_width//1.3, win_width//1.12)
+    enemy.draw()
+    gold.draw()
     pygame.display.flip()
     FPS.tick(40)
