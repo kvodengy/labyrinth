@@ -60,6 +60,14 @@ class Enemy(Player):
         else:
             self.image = self.flipped_image
             self.rect.x -= self.speed
+
+class Wall:
+    def __init__ (self, x,y,w,h, color):
+        self.rect = pygame.Rect(x,y,w,h)
+        self.color = color
+    def draw(self):
+        pygame.draw.rect(window ,self.color, self.rect)
+        
         
         
 
@@ -68,6 +76,29 @@ bg = Settings("background.png", 0, 0, win_width, win_height)
 p1 = Player("sprite1.png", 0, win_height//2, p_size, p_size, 5)
 enemy = Enemy("sprite2.png", win_width//1.3, win_height//2.3, p_size*1.5, p_size*1.5, 2)
 gold = Settings("gold.png", win_width//1.15, win_height//1.5, p_size, p_size)
+walls = [
+    Wall(win_height,0, win_width//2, 5, (0,200,255)),
+    Wall(0,0, win_width, 5, (0,200,255)),
+    Wall(0,0, win_width, 5, (0,200,255)),
+    Wall(0,0, win_width, 5, (0,200,255)),
+    Wall(0,0, win_width, 5, (0,200,255)),
+    Wall(0,0, win_width, 5, (0,200,255)),
+    Wall(0,0, win_width, 5, (0,200,255)),
+    Wall(0,0, win_width, 5, (0,200,255)),
+    Wall(0,0, win_width, 5, (0,200,255)),
+    Wall(0,0, win_width, 5, (0,200,255)),
+    Wall(0,0, win_width, 5, (0,200,255)),
+    Wall(0,0, win_width, 5, (0,200,255)),
+    Wall(0,0, win_width, 5, (0,200,255)),
+    Wall(0,0, win_width, 5, (0,200,255)),
+    Wall(0,0, win_width, 5, (0,200,255)),
+    Wall(0,0, win_width, 5, (0,200,255)),
+    Wall(0,0, win_width, 5, (0,200,255)),
+    Wall(0,0, win_width, 5, (0,200,255)),
+    Wall(0,0, win_width, 5, (0,200,255))
+
+]    
+
 game = True
 
 pygame.mixer.init()
@@ -82,6 +113,8 @@ while game:
     bg.draw()
     p1.move()
     p1.draw()
+    for w in walls:
+        w.draw()
     enemy.move(win_width//1.3, win_width//1.12)
     enemy.draw()
     gold.draw()
